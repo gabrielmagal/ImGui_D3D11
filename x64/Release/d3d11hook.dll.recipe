@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\git\D3D11-Wallhack-master\x64\Release\d3d11hook.dll</FullPath>
+      <FullPath>C:\Users\Fr33d\OneDrive\Ambiente de Trabalho\ImGui_D3D11\x64\Release\d3d11hook.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
