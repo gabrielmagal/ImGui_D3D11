@@ -1,4 +1,47 @@
-﻿  imgui.cpp
+﻿  LibraryGameHacking.cpp
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(22,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(49,27): warning C4477: 'printf_s' : format string '%f' requires an argument of type 'double', but variadic argument 1 has type 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(59,45): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(91,33): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(95): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(95,75): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(103,57): warning C4311: 'type cast': pointer truncation from 'HMODULE' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(103,57): warning C4302: 'type cast': truncation from 'HMODULE' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(103,67): warning C4312: 'type cast': conversion from 'unsigned long' to 'DWORD *' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(106): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(106,75): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(154,20): warning C4018: '<': signed/unsigned mismatch
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(155): warning C4312: 'type cast': conversion from 'DWORD' to 'BYTE *' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(158,52): warning C4267: 'return': conversion from 'size_t' to 'DWORD', possible loss of data
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(207,110): warning C4312: 'reinterpret_cast': conversion from 'DWORD' to 'LPVOID' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(208,111): warning C4312: 'reinterpret_cast': conversion from 'DWORD' to 'LPVOID' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(209,109): warning C4312: 'reinterpret_cast': conversion from 'DWORD' to 'LPVOID' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(229,91): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(237,99): warning C4311: 'reinterpret_cast': pointer truncation from 'FARPROC' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(237,99): warning C4302: 'reinterpret_cast': truncation from 'FARPROC' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(239,122): warning C4312: 'reinterpret_cast': conversion from 'DWORD' to 'LPTHREAD_START_ROUTINE' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(279,97): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(287,99): warning C4311: 'reinterpret_cast': pointer truncation from 'FARPROC' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(287,99): warning C4302: 'reinterpret_cast': truncation from 'FARPROC' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(289,122): warning C4312: 'reinterpret_cast': conversion from 'DWORD' to 'LPTHREAD_START_ROUTINE' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(370,166): warning C4311: 'reinterpret_cast': pointer truncation from 'void (__cdecl *)(void)' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(370,166): warning C4302: 'reinterpret_cast': truncation from 'void (__cdecl *)(void)' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(370,218): warning C4311: 'reinterpret_cast': pointer truncation from 'void (__cdecl *)(Pmystr)' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(370,218): warning C4302: 'reinterpret_cast': truncation from 'void (__cdecl *)(Pmystr)' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(370,220): warning C4311: 'reinterpret_cast': pointer truncation from 'LPVOID' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(370,220): warning C4302: 'reinterpret_cast': truncation from 'LPVOID' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(377,102): warning C4312: 'reinterpret_cast': conversion from 'DWORD' to 'LPTHREAD_START_ROUTINE' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(392,115): warning C4311: 'reinterpret_cast': pointer truncation from 'void (__cdecl *)(void)' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(392,115): warning C4302: 'reinterpret_cast': truncation from 'void (__cdecl *)(void)' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(392,166): warning C4311: 'reinterpret_cast': pointer truncation from 'void (__cdecl *)(Pmystr)' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(392,166): warning C4302: 'reinterpret_cast': truncation from 'void (__cdecl *)(Pmystr)' to 'DWORD'
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(396,81): warning C4312: 'type cast': conversion from 'DWORD' to 'LPVOID' of greater size
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(496,13): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(497,13): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(498,13): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(499,13): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\git\lib_gamehacking\LibraryGameHacking.cpp(500,13): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  imgui.cpp
   imgui_demo.cpp
   imgui_draw.cpp
   imgui_impl_dx11.cpp
@@ -6,11 +49,11 @@
   imgui_widgets.cpp
   universal.cpp
   Generating code
-  992 of 1002 functions (99.0%) were compiled, the rest were copied from previous compilation.
-    26 functions were new in current compilation
+  1053 of 1063 functions (99.1%) were compiled, the rest were copied from previous compilation.
+    37 functions were new in current compilation
     2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 detours.lib(detours.obj) : warning LNK4099: PDB '' was not found with 'detours.lib(detours.obj)' or at ''; linking object as if no debug info
 detours.lib(disasm.obj) : warning LNK4099: PDB '' was not found with 'detours.lib(disasm.obj)' or at ''; linking object as if no debug info
 detours.lib(modules.obj) : warning LNK4099: PDB '' was not found with 'detours.lib(modules.obj)' or at ''; linking object as if no debug info
-  d3d11hook.vcxproj -> C:\Users\Fr33d\OneDrive\Ambiente de Trabalho\ImGui_D3D11\x64\Release\d3d11hook.dll
+  d3d11hook.vcxproj -> C:\git\ImGui_D3D11\x64\Release\d3d11hook.dll

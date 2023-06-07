@@ -71,5 +71,8 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Resource Files\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="..\lib_gamehacking\LibraryGameHacking.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

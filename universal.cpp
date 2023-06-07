@@ -13,6 +13,9 @@
 #include "imgui\imgui_impl_win32.h"
 #include "imgui\imgui_impl_dx11.h"
 
+#include "main.h" //helper funcs
+#include "../lib_gamehacking/LibraryGameHacking.h"
+
 //detours
 #include "detours.h"
 #if defined _M_X64
@@ -24,24 +27,25 @@
 #pragma warning( disable : 4244 )
 
 
-typedef HRESULT(__stdcall *D3D11PresentHook) (IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
-typedef HRESULT(__stdcall *D3D11ResizeBuffersHook) (IDXGISwapChain *pSwapChain, UINT BufferCount, UINT Width, UINT Height, DXGI_FORMAT NewFormat, UINT SwapChainFlags);
-typedef void(__stdcall *D3D11DrawIndexedInstancedHook) (ID3D11DeviceContext* pContext, UINT IndexCountPerInstance, UINT InstanceCount, UINT StartIndexLocation, INT BaseVertexLocation, UINT StartInstanceLocation);
+typedef HRESULT(__stdcall* D3D11PresentHook) (IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
+typedef HRESULT(__stdcall* D3D11ResizeBuffersHook) (IDXGISwapChain* pSwapChain, UINT BufferCount, UINT Width, UINT Height, DXGI_FORMAT NewFormat, UINT SwapChainFlags);
+typedef void(__stdcall* D3D11DrawIndexedInstancedHook) (ID3D11DeviceContext* pContext, UINT IndexCountPerInstance, UINT InstanceCount, UINT StartIndexLocation, INT BaseVertexLocation, UINT StartInstanceLocation);
 
 
 D3D11PresentHook phookD3D11Present = NULL;
 D3D11ResizeBuffersHook phookD3D11ResizeBuffers = NULL;
 D3D11DrawIndexedInstancedHook phookD3D11DrawIndexedInstanced = NULL;
 
-ID3D11Device *pDevice = NULL;
-ID3D11DeviceContext *pContext = NULL;
+ID3D11Device* pDevice = NULL;
+ID3D11DeviceContext* pContext = NULL;
 
 DWORD_PTR* pSwapChainVtable = NULL;
 DWORD_PTR* pContextVTable = NULL;
 DWORD_PTR* pDeviceVTable = NULL;
 
-#include "main.h" //helper funcs
+bool bAmmuInfinit = false;
 
+bool bNoRecoil = false;
 
 //==========================================================================================================================
 
@@ -59,7 +63,7 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		if (wParam == VK_INSERT)
 		{
-			if(ShowMenu)
+			if (ShowMenu)
 				io.MouseDrawCursor = true;
 			else
 				io.MouseDrawCursor = false;
@@ -90,13 +94,13 @@ HRESULT __stdcall hookD3D11Present(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		firstTime = false; //only once
 
 		//get device
-		if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void **)&pDevice)))
+		if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice)))
 		{
 			//SwapChain = pSwapChain;
 			pSwapChain->GetDevice(__uuidof(pDevice), (void**)&pDevice);
 			pDevice->GetImmediateContext(&pContext);
 		}
-		
+
 		//imgui
 		DXGI_SWAP_CHAIN_DESC sd;
 		pSwapChain->GetDesc(&sd);
@@ -113,60 +117,6 @@ HRESULT __stdcall hookD3D11Present(IDXGISwapChain* pSwapChain, UINT SyncInterval
 		ImGui_ImplDX11_Init(pDevice, pContext);
 		ImGui::GetIO().ImeWindowHandle = window;
 
-		// Create depthstencil state
-		D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-		depthStencilDesc.DepthEnable = TRUE;
-		depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		depthStencilDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
-		depthStencilDesc.StencilEnable = FALSE;
-		depthStencilDesc.StencilReadMask = 0xFF;
-		depthStencilDesc.StencilWriteMask = 0xFF;
-		// Stencil operations if pixel is front-facing
-		depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-		depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-		// Stencil operations if pixel is back-facing
-		depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-		depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-		pDevice->CreateDepthStencilState(&depthStencilDesc, &DepthStencilState_FALSE);
-
-		//create depthbias rasterizer state
-		D3D11_RASTERIZER_DESC rasterizer_desc;
-		ZeroMemory(&rasterizer_desc, sizeof(rasterizer_desc));
-		rasterizer_desc.FillMode = D3D11_FILL_SOLID;
-		rasterizer_desc.CullMode = D3D11_CULL_NONE; //D3D11_CULL_FRONT;
-		rasterizer_desc.FrontCounterClockwise = false;
-		float bias = 1000.0f;
-		float bias_float = static_cast<float>(-bias);
-		bias_float /= 10000.0f;
-		rasterizer_desc.DepthBias = DEPTH_BIAS_D32_FLOAT(*(DWORD*)&bias_float);
-		rasterizer_desc.SlopeScaledDepthBias = 0.0f;
-		rasterizer_desc.DepthBiasClamp = 0.0f;
-		rasterizer_desc.DepthClipEnable = true;
-		rasterizer_desc.ScissorEnable = false;
-		rasterizer_desc.MultisampleEnable = false;
-		rasterizer_desc.AntialiasedLineEnable = false;
-		pDevice->CreateRasterizerState(&rasterizer_desc, &DEPTHBIASState_FALSE);
-		
-		//create normal rasterizer state
-		D3D11_RASTERIZER_DESC nrasterizer_desc;
-		ZeroMemory(&nrasterizer_desc, sizeof(nrasterizer_desc));
-		nrasterizer_desc.FillMode = D3D11_FILL_SOLID;
-		//nrasterizer_desc.CullMode = D3D11_CULL_BACK; //flickering
-		nrasterizer_desc.CullMode = D3D11_CULL_NONE;
-		nrasterizer_desc.FrontCounterClockwise = false;
-		nrasterizer_desc.DepthBias = 0.0f;
-		nrasterizer_desc.SlopeScaledDepthBias = 0.0f;
-		nrasterizer_desc.DepthBiasClamp = 0.0f;
-		nrasterizer_desc.DepthClipEnable = true;
-		nrasterizer_desc.ScissorEnable = false;
-		nrasterizer_desc.MultisampleEnable = false;
-		nrasterizer_desc.AntialiasedLineEnable = false;
-		pDevice->CreateRasterizerState(&nrasterizer_desc, &DEPTHBIASState_TRUE);
-		
 		//load cfg settings
 		LoadCfg();
 	}
@@ -197,7 +147,7 @@ HRESULT __stdcall hookD3D11Present(IDXGISwapChain* pSwapChain, UINT SyncInterval
 	}
 	else //call before you draw
 		pContext->OMSetRenderTargets(1, &RenderTargetView, NULL);
-		
+
 
 	//imgui
 	ImGui_ImplWin32_NewFrame();
@@ -213,14 +163,17 @@ HRESULT __stdcall hookD3D11Present(IDXGISwapChain* pSwapChain, UINT SyncInterval
 	//menu
 	if (ShowMenu)
 	{
-		//ImGui::SetNextWindowPos(ImVec2(50.0f, 400.0f)); //pos
-		ImGui::SetNextWindowSize(ImVec2(510.0f, 400.0f)); //size
-		ImVec4 Bgcol = ImColor(0.0f, 0.4f, 0.28f, 0.8f); //bg color
-		ImGui::PushStyleColor(ImGuiCol_WindowBg, Bgcol);
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.2f, 0.2f, 0.2f, 0.8f)); //frame color
+		ImGui::SetNextWindowSize(ImVec2{ 520, 350 }, 0);
+		ImGui::Begin("[CM] Multihack 1.0.0");
 
-		ImGui::Begin("Hack Menu");
-		ImGui::Checkbox("Delete Texture ", &DeleteTexture); //the point is to highlight textures to see which we are logging
+		if (ImGui::BeginTabBar("#tabs", 0)) {
+			if (ImGui::BeginTabItem("Weapon")) {
+				ImGui::Checkbox("AmmuInfinit", &bAmmuInfinit);
+				ImGui::Checkbox("NoRecoil", &bNoRecoil);
+			}
+			ImGui::EndTabItem();
+		}
+
 		ImGui::End();
 	}
 
@@ -229,6 +182,27 @@ HRESULT __stdcall hookD3D11Present(IDXGISwapChain* pSwapChain, UINT SyncInterval
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	return phookD3D11Present(pSwapChain, SyncInterval, Flags);
+}
+
+//==========================================================================================================================
+
+void Hacks() {
+	DWORD64 pointerAmmu = MemoryMgr::FindPatternModule("GameAssembly.dll", (BYTE*)"\x89\x86\x00\x00\x00\x00\x4c\x8b\xc3\x48\x8d\x4c\x24\x00\x48\x8b\xd6\xe8\x00\x00\x00\x00\x48\x8b\x7c\x24\x00\x48\x8b\x5c\x24\x00\x48\x8b\x74\x24\x00\x0f\x10\x00\x48\x8b\xc5\x0f\x11\x45\x00\x48\x8b\x6c\x24\x00\x48\x83\xc4\x00\x41\x5e\xc3\xe8\x00\x00\x00\x00\xcc\xcc\xcc\xcc\xcc\xcc\xcc\xcc\x48",
+		"xx????xxxxxxx?xxxx????xxxx?xxxx?xxxx?xxxxxxxxx?xxxx?xxx?xxxx????xxxxxxxxx");
+
+	DWORD64 pointerNoRecoil = MemoryMgr::FindPatternModule("GameAssembly.dll", (BYTE*)"\x48\x89\x6C\x24\x00\x48\x89\x7C\x24\x00\xF3",
+		"xxxx?xxxx?x") + 0xA;
+
+	while (true) {
+		if (bAmmuInfinit && pointerAmmu > 0) {
+			MemoryMgr::memEdit(pointerAmmu, "\x90\x90\x90\x90\x90\x90", 6);
+		}
+
+		if (bNoRecoil && pointerNoRecoil > 0) {
+			MemoryMgr::memEdit(pointerNoRecoil, "\x90\x90\x90\x90\x90\x90\x90\x90", 8);
+		}
+		Sleep(10);
+	}
 }
 
 //==========================================================================================================================
@@ -348,6 +322,7 @@ BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, LPVOID lpReserved)
 		GetModuleFileNameA(hModule, dlldir, 512);
 		for (size_t i = strlen(dlldir); i > 0; i--) { if (dlldir[i] == '\\') { dlldir[i + 1] = 0; break; } }
 		CreateThread(NULL, 0, InitHooks, NULL, 0, NULL);
+		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Hacks, NULL, 0, NULL);
 		break;
 
 	case DLL_PROCESS_DETACH: // A process unloads the DLL.
